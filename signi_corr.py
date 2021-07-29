@@ -10,12 +10,6 @@ import palettable
 import itertools
 
 
-def get_value_color_from_cmap(value, cmap_name='RdBu_r', vmin=0, vmax=1):
-    cmap = cm.get_cmap(cmap_name)
-    norm = Normalize(vmin=vmin, vmax=vmax)
-    return cmap(norm(value))
-
-
 def clean_axis(ax):
     """Remove ticks, tick labels, and frame from axis"""
     ax.get_xaxis().set_ticks([])
@@ -109,9 +103,16 @@ def getCorrelationForDFColumns(col1, col2, method='pearson'): # or 'spearman'
 
     return corr
 
-def getCorrelationMat(data, method='pearson'): # or 'spearman'
-    ''' Gets a data DF, returns a dict of all column
-    correlations matrix DFs: {'coeffMat': .., 'pvalMat': ..}
+
+def get_value_color_from_cmap(value, cmap_name='RdBu_r', vmin=0, vmax=1):
+    cmap = cm.get_cmap(cmap_name)
+    norm = Normalize(vmin=vmin, vmax=vmax)
+    return cmap(norm(value))
+
+
+def get_correlation_matrix(data, method='pearson'): # or 'spearman'
+    ''' Gets a data pandas dataframe, returns pairwise
+    correlations matrix dataframes: correlation coefficient matrix, p-values matrix.
     Drops NA values before each 2 column correlation calculation. '''
     coeffMat = pd.DataFrame(index=data.columns, columns=data.columns)
     pvalMat = pd.DataFrame(index=data.columns, columns=data.columns)
@@ -131,7 +132,6 @@ def getCorrelationMat(data, method='pearson'): # or 'spearman'
             print('Warning! a diag value is not 1. check for double indexes!')
 
     return coeffMat, pvalMat
-
 
 
 def plot_signi_corr(df, method='spearman', show_significance=True,
@@ -210,13 +210,13 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     :param colorbar_right: shift the colorbar edges
     :param colorbar_top: shift the colorbar edges
 
-    :return:
+    :return: matplotlib figure object
     '''
 
     if asterisks_upper and numbers_upper:
         raise ValueError('asterisks_upper and numbers_upper - only one of them can be True')
 
-    corrs, pvals = getCorrelationMat(df, method=method)
+    corrs, pvals = get_correlation_matrix(df, method=method)
 
     # Calculate p-vals FDR and FWER adjustment
     # if showSig:
@@ -401,5 +401,7 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
         clean_axis(ax_row_colors)
 
     plt.tight_layout()
+
+    return figh
 
 
