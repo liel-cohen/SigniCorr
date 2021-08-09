@@ -141,6 +141,9 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
                     numbers_upper=True,
                     asterisks_upper=False,
                     figsize=(10, 8),
+                    title='',
+                    title_fontsize=20,
+                    title_color='black',
                     colorbar_title='Correlation',
                     colorscale_fontsize_title=16,
                     colorscale_fontsize_ticks=14,
@@ -186,6 +189,9 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
                           upper triangle, only for significant values (unless show_significance=False)
     :param asterisks_upper: annotate the pvals in the upper triangle
     :param figsize: figure size
+    :param title: figure title. Default ''
+    :param title_fontsize: figure title fontsize. Default 20
+    :param title_color: figure title fontsize. Default 'black'
     :param colorbar_title: colorbar label string
     :param colorscale_fontsize_title:
     :param colorscale_fontsize_ticks:
@@ -266,6 +272,8 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     plt.clf()
     ax_heatmap = figh.add_subplot(plt.GridSpec(1, 1, left=main_left, bottom=main_bottom,
                                         right=main_right, top=main_top)[0, 0])
+    ax_heatmap.set_title(title, fontdict={'fontsize': title_fontsize,
+                                          'color': title_color})
     ax_heatmap.grid(None)
     pcolOut = plt.pcolormesh(valsToPlot, **heatmap_params)
     plt.yticks(())  # empty y tick labels (rows)
@@ -403,5 +411,3 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     plt.tight_layout()
 
     return figh
-
-
