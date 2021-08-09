@@ -167,6 +167,8 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     pvalues can be adjusted for multiple testing using FDR or FWER (signif_by_method).
     * When show_significance=True, correlation coefficient number are only annotated
     if significant.
+    Asterisks indicate p-values (or FDR or FWER) with ***, **, and *
+    indicating p ≤ 0.0005, 0.005, and 0.05, respectively
 
     :param df: pandas dataframe
     :param method: for calculating correlations - 'spearman' or 'pearson'
@@ -411,3 +413,5 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     plt.tight_layout()
 
     return figh
+
+
