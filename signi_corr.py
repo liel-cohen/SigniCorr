@@ -160,7 +160,7 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
                     colorbar_right=0.04, colorbar_top=0.95,
                     ):
     '''
-    Gets a dataframe with numeric columns, calculate the pairwise correlations between
+    Gets a dataframe with numeric columns, calculates the pairwise correlations between
     the columns and portray them in a heatmap. Heatmap colors show the correlation coefficient.
     Correlation coefficients can be annotated with numbers (numbers_upper=True).
     Significance is annotated with asterisks (show_significance=True).
@@ -218,13 +218,17 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
     :param colorbar_right: shift the colorbar edges
     :param colorbar_top: shift the colorbar edges
 
-    :return: matplotlib figure object
+    :return: matplotlib figure object,
+             correlations matrix,
+             dictionary containing pvalues matrics (original p-values, FWER p-values, FDR p-values)
     '''
 
     if asterisks_upper and numbers_upper:
         raise ValueError('asterisks_upper and numbers_upper - only one of them can be True')
 
     corrs, pvals = get_correlation_matrix(df, method=method)
+
+    corrs_orig = corrs.copy()
 
     # Calculate p-vals FDR and FWER adjustment
     # if showSig:
@@ -412,6 +416,6 @@ def plot_signi_corr(df, method='spearman', show_significance=True,
 
     plt.tight_layout()
 
-    return figh
+    return figh, corrs_orig, adjPvals
 
 
